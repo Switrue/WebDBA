@@ -35,16 +35,20 @@
 
 В файле `WebDBA.API/appsettings.json` укажите строку подключения к PostgreSQL:
 
-"ConnectionStrings": {
+{
+  "ConnectionStrings": {
   "AppDbContext": "Host=localhost;Port=5432;Username=postgres;Database=x_company;Password=12345;SSL Mode=Disable"
-},
+  }
+}
 
 ### 3. Адрес API
 
 в файле `WebDBA/appsettings.json` укажите URL, где запущен API:
 
- "ApiSettings": {
-  "BaseUrl": "https://localhost:7099",
-  "TimeoutSeconds": 30,
-  "AcceptHeader": "application/json"
+{
+  "ApiSettings": {
+    "BaseUrl": "https://localhost:7099",
+    "TimeoutSeconds": 30,
+    "AcceptHeader": "application/json"
+  }
 }
