@@ -1,0 +1,234 @@
+﻿@model WebDBA.Models.DTOs.StructuralUnits.CreateStructuralUnitDto
+
+@{
+    ViewData["Title"] = "Создание структурного подразделения";
+}
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-plus-circle"></i> Создание структурного подразделения
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle"></i> @TempData["Success"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form asp-action="Create" method="post" id="createForm">
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <!-- ID -->
+                        <div class="mb-3">
+                            <label asp-for="Id" class="form-label fw-bold">
+                                <i class="bi bi-hash"></i> Код подразделения
+                            </label>
+                            <input asp-for="Id" class="form-control"
+                                   placeholder="Например: 0001"
+                                   maxlength="4"
+                                   autofocus />
+                            <span asp-validation-for="Id" class="text-danger d-block"></span>
+                            <small class="form-text text-muted">
+                                <i class="bi bi-info-circle"></i> Максимум 4 символа (буквы и цифры)
+                            </small>
+                        </div>
+
+                        <!-- Name -->
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label fw-bold">
+                                <i class="bi bi-building"></i> Название
+                            </label>
+                            <input asp-for="Name" class="form-control"
+                                   placeholder="Введите полное название подразделения"
+                                   maxlength="200" />
+                            <span asp-validation-for="Name" class="text-danger d-block"></span>
+                        </div>
+
+                        <!-- Abbreviation -->
+                        <div class="mb-3">
+                            <label asp-for="Abbreviation" class="form-label fw-bold">
+                                <i class="bi bi-fonts"></i> Аббревиатура
+                            </label>
+                            <input asp-for="Abbreviation" class="form-control"
+                                   placeholder="Например: ООО"
+                                   maxlength="15" />
+                            <span asp-validation-for="Abbreviation" class="text-danger d-block"></span>
+                            <small class="form-text text-muted">Необязательное поле</small>
+                        </div>
+
+                        <!-- ParentId -->
+                        <div class="mb-3">
+                            <label asp-for="ParentId" class="form-label fw-bold">
+                                <i class="bi bi-diagram-3"></i> Родительское подразделение
+                            </label>
+                            <select asp-for="ParentId" class="form-select" id="parentSelect">
+                                <option value="">Нет родителя (корневое подразделение)</option>
+                                @foreach (var item in ViewBag.UnitsList)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                            <span asp-validation-for="ParentId" class="text-danger d-block"></span>
+                            <small class="form-text text-muted">Выберите вышестоящее подразделение</small>
+                        </div>
+
+                        <!-- ====== Ancestors - hidden fields for an array ====== -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">
+                                <i class="bi bi-tree"></i> Путь предков
+                            </label>
+                            <div class="border rounded p-3 bg-light" id="ancestorsDisplay" style="min-height: 45px;">
+                                @if (Model.Ancestors != null && Model.Ancestors.Any())
+                                {
+                                    <span>@string.Join(" → ", Model.Ancestors)</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        <i class="bi bi-arrow-right"></i> Будет вычислен автоматически при выборе родителя
+                                    </span>
+                                }
+                            </div>
+
+                            <div id="ancestorsContainer">
+                                @if (Model.Ancestors != null && Model.Ancestors.Any())
+                                {
+                                    for (int i = 0; i < Model.Ancestors.Count; i++)
+                                    {
+                                        <input type="hidden" name="Ancestors[@i]" value="@Model.Ancestors[i]" />
+                                    }
+                                }
+                            </div>
+
+                            <span asp-validation-for="Ancestors" class="text-danger d-block"></span>
+                            <small class="form-text text-muted">
+                                <i class="bi bi-info-circle"></i> Путь предков вычисляется автоматически
+                            </small>
+                        </div>
+
+                        <!-- LiquidationDate -->
+                        <input type="hidden" asp-for="LiquidationDate" />
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                            <a asp-controller="Workers" asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Назад к списку
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                                <i class="bi bi-check-circle"></i> Создать подразделение
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        $(document).ready(function() {
+            $('#parentSelect').change(function() {
+                const parentId = $(this).val();
+                const $display = $('#ancestorsDisplay');
+                const $container = $('#ancestorsContainer');
+
+                if (!parentId) {
+                    $display.html('<span class="text-muted"><i class="bi bi-arrow-right"></i> Будет вычислен автоматически при выборе родителя</span>');
+                    $container.empty(); 
+                    return;
+                }
+
+                $display.html('<span class="text-muted"><i class="bi bi-hourglass-split"></i> Загрузка пути...</span>');
+
+                $.ajax({
+                    url: '@Url.Action("GetAncestorsPath", "StructuralUnits")',
+                    type: 'GET',
+                    data: { unitId: parentId },
+                    success: function(data) {
+                        $container.empty();
+
+                        if (data && Array.isArray(data) && data.length > 0) {
+                            // ====== IMPORTANT: Add each element as a separate field ======
+                            data.forEach(function(item, index) {
+                                $container.append(`
+                                    <input type="hidden" name="Ancestors[${index}]" value="${item}" />
+                                `);
+                            });
+
+                            const displayText = data.join(' → ');
+                            $display.html(`<span><i class="bi bi-tree text-primary"></i> ${displayText}</span>`);
+
+                        } else {
+                            $display.html('<span class="text-muted"><i class="bi bi-arrow-right"></i> Путь не найден</span>');
+                        }
+                    },
+                    error: function(xhr) {
+                        $container.empty();
+                        $display.html('<span class="text-danger"><i class="bi bi-exclamation-triangle"></i> Ошибка при загрузке пути</span>');
+                    }
+                });
+            });
+
+            $('#createForm').submit(function(e) {
+                const parentId = $('#parentSelect').val();
+                const $container = $('#ancestorsContainer');
+                const ancestorsCount = $container.children().length;
+
+                $container.children().each(function() {
+                    console.log(`  ${$(this).attr('name')} = ${$(this).val()}`);
+                });
+
+                if (parentId && ancestorsCount === 0) {
+                    e.preventDefault();
+                    alert('Ошибка: не удалось вычислить путь предков. Пожалуйста, выберите родителя заново.');
+                    return false;
+                }
+
+                return true;
+            });
+
+            // Hint when entering the ID
+            $('#Id').on('input', function() {
+                const val = $(this).val().toUpperCase();
+                $(this).val(val.replace(/[^A-Z0-9]/g, ''));
+            });
+        });
+    </script>
+}
+
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .card-header {
+        border-radius: 10px 10px 0 0;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    #ancestorsDisplay {
+        font-size: 0.95rem;
+    }
+
+        #ancestorsDisplay i {
+            margin-right: 5px;
+        }
+</style>

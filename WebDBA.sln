@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.36105.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDBA", "WebDBA\WebDBA.csproj", "{2A779453-334F-46A6-91DF-8FCDAFA1396C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDBA.API", "WebDBA.API\WebDBA.API.csproj", "{EA695F84-FD5F-40F4-8B90-A543CC66E00F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDBA.Migrator", "WebDBA.Migrator\WebDBA.Migrator.csproj", "{C3C5E1F4-8AAA-405F-914B-9214947D1454}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2A779453-334F-46A6-91DF-8FCDAFA1396C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A779453-334F-46A6-91DF-8FCDAFA1396C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A779453-334F-46A6-91DF-8FCDAFA1396C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A779453-334F-46A6-91DF-8FCDAFA1396C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA695F84-FD5F-40F4-8B90-A543CC66E00F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA695F84-FD5F-40F4-8B90-A543CC66E00F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA695F84-FD5F-40F4-8B90-A543CC66E00F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA695F84-FD5F-40F4-8B90-A543CC66E00F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3C5E1F4-8AAA-405F-914B-9214947D1454}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3C5E1F4-8AAA-405F-914B-9214947D1454}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3C5E1F4-8AAA-405F-914B-9214947D1454}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {03C64D76-D2BA-45EE-95E2-BA5FB7F31E56}
+	EndGlobalSection
+EndGlobal

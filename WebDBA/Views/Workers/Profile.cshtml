@@ -1,0 +1,201 @@
+﻿@using WebDBA.Models.DTOs.Workers
+@model WorkerWithLatestHistoryDto
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow-lg border-0">
+                <!-- Заголовок карточки -->
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="bi bi-person-badge"></i> Профиль сотрудника
+                        </h4>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Левая колонка: Фото и основные данные -->
+                        <div class="col-md-4 text-center">
+                            <!-- Фото -->
+                            @if (Model.Photo != null && Model.Photo.Length > 0)
+                            {
+                                <div class="mb-3">
+                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Photo)"
+                                    alt="Фото сотрудника"
+                                    class="rounded-circle"
+                                    style="width: 180px; height: 180px; object-fit: cover;" />
+                                </div>
+                            }
+                            else
+                            {
+                                @if (Model.Gender == "Женский")
+                                {
+                                    <div class="mb-3">
+                                        <img src="~/images/workers/women-profile.png"
+                                             alt="Женский профиль"
+                                             class="rounded-circle"
+                                             style="width: 180px; height: 180px; object-fit: cover;" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="mb-3">
+                                        <img src="~/images/workers/man-profile.png"
+                                             alt="Мужской профиль"
+                                             class="rounded-circle"
+                                             style="width: 180px; height: 180px; object-fit: cover;" />
+                                    </div>
+                                }
+                            }
+
+                            <!-- Имя под фото -->
+                            <h4 class="mb-1">@Model.FullName</h4>
+                            <p class="text-muted mb-3">@(Model.LatestEmployment?.PositionName ?? "Не указана")</p>
+
+                            <!-- Кнопки действий -->
+                            <div class="d-grid gap-2">
+                                @if (Model.IsActive)
+                                {
+                                    <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-warning">
+                                        <i class="bi bi-pencil"></i> Редактировать
+                                    </a>
+                                    <form method="post" action="@Url.Action("Dismiss", new { id = Model.Id })"
+                                          onsubmit="return confirm('Уволить сотрудника @Model.FullName?')"
+                                          style="display: inline;">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-secondary w-100">
+                                            <i class="bi bi-person-x"></i> Уволить
+                                        </button>
+                                    </form>
+                                }
+                                <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left"></i> Назад к списку
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Правая колонка: Все данные -->
+                        <div class="col-md-8">
+                            <div class="row">
+                                <!-- Личная информация -->
+                                <div class="col-12">
+                                    <h5 class="border-bottom pb-2 text-primary">
+                                        <i class="bi bi-person-vcard"></i> Личная информация
+                                    </h5>
+                                    <dl class="row mt-3">
+                                        <dt class="col-sm-4 text-muted">ID</dt>
+                                        <dd class="col-sm-8">@Model.Id</dd>
+
+                                        <dt class="col-sm-4 text-muted">Имя</dt>
+                                        <dd class="col-sm-8">@Model.Name</dd>
+
+                                        <dt class="col-sm-4 text-muted">Фамилия</dt>
+                                        <dd class="col-sm-8">@Model.Surname</dd>
+
+                                        @if (!string.IsNullOrEmpty(Model.Patronymic))
+                                        {
+                                            <dt class="col-sm-4 text-muted">Отчество</dt>
+                                            <dd class="col-sm-8">@Model.Patronymic</dd>
+                                        }
+
+                                        <dt class="col-sm-4 text-muted">Пол</dt>
+                                        <dd class="col-sm-8">@(Model.Gender == "Мужской" ? "Мужской" : "Женский")</dd>
+
+                                        <dt class="col-sm-4 text-muted">Дата рождения</dt>
+                                        <dd class="col-sm-8">@Model.DateOfBirth.ToString("dd.MM.yyyy")</dd>
+                                    </dl>
+                                </div>
+
+                                <!-- Контактная информация -->
+                                <div class="col-12 mt-3">
+                                    <h5 class="border-bottom pb-2 text-primary">
+                                        <i class="bi bi-envelope"></i> Контактная информация
+                                    </h5>
+                                    <dl class="row mt-3">
+                                        <dt class="col-sm-4 text-muted">Телефон</dt>
+                                        <dd class="col-sm-8">
+                                            <a href="tel:@Model.Phone">@Model.Phone</a>
+                                        </dd>
+
+                                        <dt class="col-sm-4 text-muted">Email</dt>
+                                        <dd class="col-sm-8">
+                                            <a href="mailto:@Model.Email">@Model.Email</a>
+                                        </dd>
+                                    </dl>
+                                </div>
+
+                                <!-- Рабочая информация -->
+                                <div class="col-12 mt-3">
+                                    <h5 class="border-bottom pb-2 text-primary">
+                                        <i class="bi bi-briefcase"></i> Рабочая информация
+                                    </h5>
+                                    <dl class="row mt-3">
+                                        @if (Model.LatestEmployment != null)
+                                        {
+                                            <dt class="col-sm-4 text-muted">Должность</dt>
+                                            <dd class="col-sm-8">@Model.LatestEmployment.PositionName</dd>
+
+                                            <dt class="col-sm-4 text-muted">Дата приёма</dt>
+                                            <dd class="col-sm-8">@Model.LatestEmployment.DateOfArrival.ToString("dd.MM.yyyy")</dd>
+
+                                            @if (Model.LatestEmployment.DepartureDate.HasValue)
+                                            {
+                                                <dt class="col-sm-4 text-muted">Дата увольнения</dt>
+                                                <dd class="col-sm-8 text-danger">
+                                                    <i class="bi bi-exclamation-triangle"></i>
+                                                    @Model.LatestEmployment.DepartureDate.Value.ToString("dd.MM.yyyy")
+                                                </dd>
+                                            }
+
+                                            @if (!string.IsNullOrEmpty(Model.LatestEmployment.ArrivedAtName))
+                                            {
+                                                <dt class="col-sm-4 text-muted">Откуда прибыл</dt>
+                                                <dd class="col-sm-8">
+                                                    <i class="bi bi-arrow-right-circle"></i>
+                                                    @Model.LatestEmployment.ArrivedAtName
+                                                </dd>
+                                            }
+
+                                            @if (!string.IsNullOrEmpty(Model.LatestEmployment.LeftForName))
+                                            {
+                                                <dt class="col-sm-4 text-muted">Куда убыл</dt>
+                                                <dd class="col-sm-8">
+                                                    <i class="bi bi-arrow-left-circle"></i>
+                                                    @Model.LatestEmployment.LeftForName
+                                                </dd>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <dd class="col-sm-12 text-muted">
+                                                <i class="bi bi-info-circle"></i> Информация о трудоустройстве отсутствует
+                                            </dd>
+                                        }
+
+                                        <dt class="col-sm-4 text-muted">Статус</dt>
+                                        <dd class="col-sm-8">
+                                            @if (Model.IsActive)
+                                            {
+                                                <span class="badge bg-success">
+                                                    <i class="bi bi-check-circle"></i> Работает
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">
+                                                    <i class="bi bi-x-circle"></i> Уволен
+                                                </span>
+                                            }
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

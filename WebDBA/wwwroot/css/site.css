@@ -1,0 +1,151 @@
+/* Styles for wood*/
+.tree-container {
+    padding: 10px 0;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.tree {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+    .tree li {
+        position: relative;
+        padding: 0;
+        margin: 0;
+    }
+
+    .tree .tree-node {
+        display: flex;
+        align-items: center;
+        padding: 6px 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+        color: #333;
+        border-left: 3px solid transparent;
+    }
+
+        .tree .tree-node:hover {
+            background-color: #f0f0f0;
+        }
+
+        .tree .tree-node.selected {
+            background-color: #e3f2fd;
+            border-left-color: #007bff;
+            font-weight: 600;
+        }
+
+        .tree .tree-node.inactive {
+            color: #999;
+        }
+
+        .tree .tree-node .toggle-icon {
+            width: 20px;
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.8rem;
+            transition: transform 0.2s;
+        }
+
+            .tree .tree-node .toggle-icon.expanded {
+                transform: rotate(90deg);
+            }
+
+        .tree .tree-node .node-icon {
+            margin-right: 8px;
+            color: #007bff;
+        }
+
+            .tree .tree-node .node-icon.inactive {
+                color: #dc3545;
+            }
+
+        .tree .tree-node .badge-count {
+            margin-left: auto;
+            font-size: 0.7rem;
+            background: #e9ecef;
+            color: #495057;
+        }
+
+    .tree .tree-children {
+        list-style: none;
+        padding-left: 20px;
+        display: none;
+    }
+
+        .tree .tree-children.expanded {
+            display: block;
+        }
+
+/* Styles for the table */
+.table-responsive {
+    min-height: 300px;
+}
+
+.table th {
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.badge-status {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.8rem;
+}
+
+    .badge-status.active {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .badge-status.inactive {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+/* Loading animation */
+.loading-overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+    .loading-overlay.active {
+        display: flex;
+    }
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

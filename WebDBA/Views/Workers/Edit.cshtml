@@ -1,0 +1,133 @@
+﻿@using WebDBA.Models.ViewModels
+@model WorkerFormViewModel
+
+@{
+    ViewData["Title"] = "Редактирование сотрудника";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0"><i class="bi bi-person-gear"></i> Редактирование сотрудника</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <!-- ID (for display) -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">ID</label>
+                            <div class="form-control bg-light">@Model.WorkerId</div>
+                            <input type="hidden" asp-for="WorkerId" />
+                        </div>
+
+                        <!-- Full name -->
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="UpdateDto!.Name" class="form-label fw-bold"></label>
+                                <input asp-for="UpdateDto!.Name" class="form-control" placeholder="Иван" />
+                                <span asp-validation-for="UpdateDto!.Name" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="UpdateDto!.Surname" class="form-label fw-bold"></label>
+                                <input asp-for="UpdateDto!.Surname" class="form-control" placeholder="Иванов" />
+                                <span asp-validation-for="UpdateDto!.Surname" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="UpdateDto!.Patronymic" class="form-label fw-bold"></label>
+                                <input asp-for="UpdateDto!.Patronymic" class="form-control" placeholder="Иванович" />
+                                <span asp-validation-for="UpdateDto!.Patronymic" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Gender and Date of birth -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="UpdateDto!.Gender" class="form-label fw-bold"></label>
+                                <select asp-for="UpdateDto!.Gender" asp-items="Model.Genders" class="form-select">
+                                    <option value="">-- Выберите --</option>
+                                </select>
+                                <span asp-validation-for="UpdateDto!.Gender" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="UpdateDto!.DateOfBirth" class="form-label fw-bold"></label>
+                                <input asp-for="UpdateDto!.DateOfBirth" class="form-control" type="date" />
+                                <span asp-validation-for="UpdateDto!.DateOfBirth" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Phone and Email Address -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="UpdateDto!.Phone" class="form-label fw-bold"></label>
+                                <input asp-for="UpdateDto!.Phone" class="form-control" placeholder="+7 (999) 123-45-67" />
+                                <span asp-validation-for="UpdateDto!.Phone" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="UpdateDto!.Email" class="form-label fw-bold"></label>
+                                <input asp-for="UpdateDto!.Email" class="form-control" type="email" placeholder="example@mail.com" />
+                                <span asp-validation-for="UpdateDto!.Email" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Position and Division -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="UpdateDto!.PositionId" class="form-label fw-bold"></label>
+                                <select asp-for="UpdateDto!.PositionId" asp-items="Model.Positions" class="form-select">
+                                    <option value="">-- Выберите должность --</option>
+                                </select>
+                                <span asp-validation-for="UpdateDto!.PositionId" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="UpdateDto!.ArrivedAt" class="form-label fw-bold"></label>
+                                <select asp-for="UpdateDto!.ArrivedAt" asp-items="Model.StructuralUnits" class="form-select">
+                                    <option value="">-- Выберите подразделение --</option>
+                                </select>
+                                <span asp-validation-for="UpdateDto!.ArrivedAt" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Photo -->
+                        <div class="mb-3">
+                            <label asp-for="UpdateDto!.Photo" class="form-label fw-bold"></label>
+                            @if (Model.UpdateDto?.Photo != null && Model.UpdateDto.Photo.Length > 0)
+                            {
+                                <div class="mb-2">
+                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.UpdateDto.Photo)"
+                                         alt="Фото" style="max-width: 150px; max-height: 150px; border-radius: 8px;" />
+                                </div>
+                            }
+                            <input type="file" name="photoFile" class="form-control" accept="image/*" />
+                            <div class="form-text">Загрузите новую фотографию, чтобы заменить существующую</div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Сохранить
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Назад
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

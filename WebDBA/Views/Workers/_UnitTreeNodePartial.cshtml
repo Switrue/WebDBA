@@ -1,0 +1,70 @@
+﻿@using WebDBA.Models.DTOs
+@using WebDBA.Models.DTOs.StructuralUnits
+@model StructuralUnitTreeDto
+
+@{
+    var selectedUnitId = ViewData["SelectedUnitId"]?.ToString() ?? string.Empty;
+    var isSelected = Model.Id == selectedUnitId;
+    var isActive = Model.IsActive;
+}
+
+<li>
+    <div class="tree-node @(isSelected ? "selected" : "") @(!isActive ? "inactive" : "")"
+         data-unit-id="@Model.Id">
+        @if (Model.HasChildren)
+        {
+            <span class="toggle-icon expanded">
+                <i class="bi bi-chevron-right"></i>
+            </span>
+        }
+        else
+        {
+            <span class="toggle-icon">
+                <i class="bi bi-circle"></i>
+            </span>
+        }
+
+        <span class="node-icon @(!isActive ? "inactive" : "")">
+            @if (isActive)
+            {
+                <i class="bi bi-folder"></i>
+            }
+            else
+            {
+                <i class="bi bi-folder-x"></i>
+            }
+        </span>
+
+        <span>@Model.Name</span>
+
+        @if (!isActive)
+        {
+            <span class="badge bg-danger ms-2" style="font-size: 0.6rem;">Ликвидировано</span>
+        }
+
+        @if (Model.EmployeeCount > 0)
+        {
+            <span class="badge badge-count">
+                @Model.EmployeeCount
+            </span>
+        }
+    </div>
+
+    @if (Model.HasChildren)
+    {
+        <ul class="tree-children expanded">
+            @foreach (var child in Model.Children)
+            {
+                <li>
+                    @{
+                        var childViewData = new ViewDataDictionary(ViewData)
+                        {
+                            ["SelectedUnitId"] = selectedUnitId  
+                        };
+                    }
+                    @await Html.PartialAsync("_UnitTreeNodePartial", child, childViewData)
+                </li>
+            }
+        </ul>
+    }
+</li>
