@@ -1,39 +1,39 @@
 # 🗄️ WebDBA - Web Database Administrator
 
-**WebDBA** — это веб-приложение для администрирования и управления структурными подразделениями и сотрудниками. Система построена на архитектуре клиент-сервер с разделением на три независимых компонента.
+**WebDBA** is a web application for administering and managing business units and employees. The system is built on a client-server architecture divided into three independent components.
 
 ---
 
-## 📦 Структура решения
+## 📦 Solution structure
 
-Решение состоит из трёх проектов:
+The solution consists of three projects:
 
-| Проект | Назначение |
-|--------|------------|
-| **WebDBA** | Веб-приложение (клиентская часть) — UI для работы с подразделениями и сотрудниками |
-| **WebDBA.API** | API — программный интерфейс для взаимодействия с базой данных |
-| **WebDBA.Migrator** | Миграции — управление схемой базы данных |
+| Project | Destination |
+|--------|-----------|
+| **WebDBA** | Web application (client part) - UI for working with departments and employees |
+| **WebDBA.API** | API - program interface for interacting with the database |
+| **WebDBA.Migrator** | Migrations - Database Schema Management |
 
 ---
 
-## 🛠 Технологический стек
+## 🛠 Technology stack
 
 - **.NET 9.0**
 - **ASP.NET Core MVC** (WebDBA)
 - **ASP.NET Core Web API** (WebDBA.API)
 - **Entity Framework Core** (ORM)
-- **PostgreSQL** (БД)
+- **PostgreSQL** (DB)
 - **Npgsql** (PostgreSQL 15)
 - **Bootstrap 5** + **Bootstrap Icons** (UI)
-- **JavaScript** + **jQuery** (клиентская логика)
+- **JavaScript** + **jQuery** (client logic)
 
 ---
 
-## ⚙️ Настройка проекта
+## ⚙️ Project setup
 
-### 1. Строка подключения к БД
+### 1. Database connection string
 
-В файле `WebDBA.API/appsettings.json` укажите строку подключения к PostgreSQL:
+In the `WebDBA.API/appsettings.json` file, specify the PostgreSQL connection string:
 
 ```json
 {
@@ -43,14 +43,14 @@
 }
 ```
 
-### 2. Адрес API
+### 2. API address
 
-в файле `WebDBA/appsettings.json` укажите URL, где запущен API:
+in the `WebDBA/appsettings.json` file specify the URL where the API is running:
 
 ```json
 {
   "ApiSettings": {
-    "BaseUrl": "https://localhost:7099",
+"BaseUrl": "https://localhost:7099",
     "TimeoutSeconds": 30,
     "AcceptHeader": "application/json"
   }
