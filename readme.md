@@ -45,7 +45,7 @@ In the `WebDBA.API/appsettings.json` file, specify the PostgreSQL connection str
 
 ### 2. API address
 
-in the `WebDBA/appsettings.json` file specify the URL where the API is running:
+In the `WebDBA/appsettings.json` file specify the URL where the API is running:
 
 ```json
 {
