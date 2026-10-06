@@ -1,10 +1,10 @@
-# 🗄️ WebDBA - Web Database Administrator
+# WebDBA - Web Database Administrator
 
 **WebDBA** is a web application for administering and managing business units and employees. The system is built on a client-server architecture divided into three independent components.
 
 ---
 
-## 📦 Solution structure
+## Solution structure
 
 The solution consists of three projects:
 
@@ -16,7 +16,7 @@ The solution consists of three projects:
 
 ---
 
-## 🛠 Technology stack
+## Technology stack
 
 - **.NET 9.0**
 - **ASP.NET Core MVC** (WebDBA)
@@ -29,7 +29,7 @@ The solution consists of three projects:
 
 ---
 
-## ⚙️ Project setup
+## Project setup
 
 ### 1. Database connection string
 
