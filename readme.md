@@ -60,5 +60,5 @@ In the `WebDBA/appsettings.json` file specify the URL where the API is running:
 ___
 
 <div align="right">
-  <em>ByTrollka · 2026</em>
+  <em>BySwitrue · 2026</em>
 </div>
